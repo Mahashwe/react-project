@@ -11,7 +11,6 @@ type DashboardProps = {
     tasks: Task[];
 };
 
-// Small helper: window size (Confetti needs width/height)
 function useWindowSize() {
     const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
 
@@ -35,7 +34,8 @@ const Dashboard = ({ tasks }: DashboardProps) => {
 
     useEffect(() => {
         if (allCompleted) {
-            setCelebrate(true);
+            setCelebrate(true)
+            alert("Congratulations! You've completed all your tasks!");
 
             const timer = setTimeout(() => setCelebrate(false), 5000);
             return () => clearTimeout(timer);
