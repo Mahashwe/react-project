@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import "./style.css"
-import download from "../assets/download.jpg"
+import React, { useEffect, useState } from "react";
+import Confetti from "react-confetti";
 
 type Task = {
     id: number;
@@ -12,27 +11,49 @@ type DashboardProps = {
     tasks: Task[];
 };
 
-const allDone = (tasks: Task[]) => {
-    const completed = tasks.filter(t => t.completed).length;
+// Small helper: window size (Confetti needs width/height)
+function useWindowSize() {
+    const [size, setSize] = useState({ width: window.innerWidth, height: window.innerHeight });
 
-    if (tasks.length > 0 && tasks.length === completed) {
-        alert("All tasks completed! Great job!");
-    }
-};
+    useEffect(() => {
+        const onResize = () => setSize({ width: window.innerWidth, height: window.innerHeight });
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+    }, []);
+
+    return size;
+}
 
 const Dashboard = ({ tasks }: DashboardProps) => {
+    const { width, height } = useWindowSize();
+
+    const total = tasks.length;
+    const completed = tasks.filter((t) => t.completed).length;
+    const allCompleted = total > 0 && completed === total;
+
+    const [celebrate, setCelebrate] = useState(false);
+
     useEffect(() => {
-        allDone(tasks);
-    }, [tasks]);
+        if (allCompleted) {
+            setCelebrate(true);
+
+            const timer = setTimeout(() => setCelebrate(false), 5000);
+            return () => clearTimeout(timer);
+        } else {
+            setCelebrate(false);
+        }
+    }, [allCompleted]);
+
     return (
         <div className="new">
+            {celebrate && <Confetti width={width} height={height} />}
+
             <h2>Your Progress</h2>
             <div>
-                <h3>Total Tasks: {tasks.length}</h3>
-                <h3>Completed: {tasks.filter(t => t.completed).length}</h3>
-                <h3>Pending: {tasks.filter(t => !t.completed).length}</h3>
+                <h3>Total Tasks: {total}</h3>
+                <h3>Completed: {completed}</h3>
+                <h3>Pending: {total - completed}</h3>
             </div>
-            <img src={download} alt="Progress" className="progressImg" />
         </div>
     );
 };
