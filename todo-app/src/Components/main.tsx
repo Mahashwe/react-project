@@ -28,6 +28,14 @@ function Main() {
         setTasks(tasks.filter(task => task.id !== id))
     }
 
+    const doneTask = (id: number) => {
+        setTasks(tasks.map(task =>
+            task.id === id ?
+                { ...task, completed: !task.completed } :
+                task
+        ))
+    }
+
     return (
         <div>
             <div className="card">
@@ -37,15 +45,22 @@ function Main() {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                 />
-                <button onClick={addTask}>Add Task</button>
+                <button className="addBtn" onClick={addTask}>Add</button>
             </div>
 
-            {tasks.map((task) => (
-                <div className="card" key={task.id}>
-                    <h4>{task.title}</h4>
-                    <button onClick={() => deleteTask(task.id)}>Delete Task</button>
-                </div>
-            ))}
+            <div className="taskList">
+                {tasks.map((task) => (
+                    <div className="card" key={task.id}>
+                        <h4 className={task.completed ? "completed" : ""}>{task.title}</h4>
+                        <input
+                            type="checkbox"
+                            checked={task.completed}
+                            onChange={() => doneTask(task.id)}
+                        />
+                        <button className="deleteBtn" onClick={() => deleteTask(task.id)}>Delete</button>
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }
