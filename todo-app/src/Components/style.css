@@ -95,3 +95,14 @@
     opacity: 0.6;
     background-color: rgb(87, 87, 83) transparent;
 }
+
+.new {
+    background-color: rgb(154, 218, 211);
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    text-align: center;
+}

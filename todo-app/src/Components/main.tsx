@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import "./style.css"
 
 type Task = {
@@ -7,34 +7,38 @@ type Task = {
     completed: boolean
 }
 
-function Main() {
-    const [tasks, setTasks] = useState<Task[]>([])
-    const [inputValue, setInputValue] = useState<string>("")
+type MainProps = {
+    tasks: Task[];
+    setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+}
+
+function Main({ tasks, setTasks }: MainProps) {
+    const [inputValue, setInputValue] = useState<string>("");
 
     const addTask = () => {
-        if (inputValue.trim() === "") return
+        if (inputValue.trim() === "") return;
 
         const newTask: Task = {
             id: Date.now(),
             title: inputValue,
             completed: false
-        }
+        };
 
-        setTasks([...tasks, newTask])
-        setInputValue("")
-    }
+        setTasks([...tasks, newTask]);
+        setInputValue("");
+    };
 
     const deleteTask = (id: number) => {
-        setTasks(tasks.filter(task => task.id !== id))
-    }
+        setTasks(tasks.filter(task => task.id !== id));
+    };
 
     const doneTask = (id: number) => {
         setTasks(tasks.map(task =>
             task.id === id ?
                 { ...task, completed: !task.completed } :
                 task
-        ))
-    }
+        ));
+    };
 
     return (
         <div>
@@ -62,7 +66,7 @@ function Main() {
                 ))}
             </div>
         </div>
-    )
+    );
 }
 
 export default Main
